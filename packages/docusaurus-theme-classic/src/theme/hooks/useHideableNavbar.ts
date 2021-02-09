@@ -5,22 +5,21 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import {useState, useCallback, useEffect, useRef} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import {useLocation} from '@docusaurus/router';
+import {useThemeConfig, domUtils} from '@docusaurus/theme-common';
 import useScrollPosition from '@theme/hooks/useScrollPosition';
 import type {useHideableNavbarReturns} from '@theme/hooks/useHideableNavbar';
 
-const useHideableNavbar = (hideOnScroll: boolean): useHideableNavbarReturns => {
+const useHideableNavbar = (): useHideableNavbarReturns => {
+  const {hideOnScroll} = useThemeConfig().navbar;
   const location = useLocation();
-  const [isNavbarVisible, setIsNavbarVisible] = useState(hideOnScroll);
   const isFocusedAnchor = useRef(false);
+  const [navbarVisible, setNavbarVisible] = useState(hideOnScroll);
   const [lastScrollTop, setLastScrollTop] = useState(0);
-  const [navbarHeight, setNavbarHeight] = useState(0);
-  const navbarRef = useCallback((node: HTMLElement | null) => {
-    if (node !== null) {
-      setNavbarHeight(node.getBoundingClientRect().height);
-    }
-  }, []);
+  const navbarHeight = domUtils.convertRemToPx(
+    domUtils.getPropertyValue('--ifm-navbar-height'),
+  );
 
   useScrollPosition(
     ({scrollY: scrollTop}) => {
@@ -34,13 +33,13 @@ const useHideableNavbar = (hideOnScroll: boolean): useHideableNavbarReturns => {
 
       if (isFocusedAnchor.current) {
         isFocusedAnchor.current = false;
-        setIsNavbarVisible(false);
+        setNavbarVisible(false);
         setLastScrollTop(scrollTop);
         return;
       }
 
       if (lastScrollTop && scrollTop === 0) {
-        setIsNavbarVisible(true);
+        setNavbarVisible(true);
       }
 
       const documentHeight =
@@ -48,9 +47,9 @@ const useHideableNavbar = (hideOnScroll: boolean): useHideableNavbarReturns => {
       const windowHeight = window.innerHeight;
 
       if (lastScrollTop && scrollTop >= lastScrollTop) {
-        setIsNavbarVisible(false);
+        setNavbarVisible(false);
       } else if (scrollTop + windowHeight < documentHeight) {
-        setIsNavbarVisible(true);
+        setNavbarVisible(true);
       }
 
       setLastScrollTop(scrollTop);
@@ -67,7 +66,7 @@ const useHideableNavbar = (hideOnScroll: boolean): useHideableNavbarReturns => {
       return;
     }
 
-    setIsNavbarVisible(true);
+    setNavbarVisible(true);
   }, [location.pathname]);
 
   useEffect(() => {
@@ -79,8 +78,8 @@ const useHideableNavbar = (hideOnScroll: boolean): useHideableNavbarReturns => {
   }, [location.hash]);
 
   return {
-    navbarRef,
-    isNavbarVisible,
+    navbarVisible,
+    setNavbarVisible,
   };
 };
 

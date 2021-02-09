@@ -12,7 +12,7 @@ import SearchBar from '@theme/SearchBar';
 import Toggle from '@theme/Toggle';
 import useThemeContext from '@theme/hooks/useThemeContext';
 import {useThemeConfig} from '@docusaurus/theme-common';
-import useHideableNavbar from '@theme/hooks/useHideableNavbar';
+import useUserPreferencesContext from '@theme/hooks/useUserPreferencesContext';
 import useLockBodyScroll from '@theme/hooks/useLockBodyScroll';
 import useWindowSize, {windowSizes} from '@theme/hooks/useWindowSize';
 import NavbarItem from '@theme/NavbarItem';
@@ -49,7 +49,7 @@ function Navbar(): JSX.Element {
   const [isSearchBarExpanded, setIsSearchBarExpanded] = useState(false);
 
   const {isDarkTheme, setLightTheme, setDarkTheme} = useThemeContext();
-  const {navbarRef, isNavbarVisible} = useHideableNavbar(hideOnScroll);
+  const {navbarVisible} = useUserPreferencesContext();
 
   useLockBodyScroll(sidebarShown);
 
@@ -77,13 +77,12 @@ function Navbar(): JSX.Element {
 
   return (
     <nav
-      ref={navbarRef}
       className={clsx('navbar', 'navbar--fixed-top', {
         'navbar--dark': style === 'dark',
         'navbar--primary': style === 'primary',
         'navbar-sidebar--show': sidebarShown,
         [styles.navbarHideable]: hideOnScroll,
-        [styles.navbarHidden]: !isNavbarVisible,
+        [styles.navbarHidden]: hideOnScroll && !navbarVisible,
       })}>
       <div className="navbar__inner">
         <div className="navbar__items">

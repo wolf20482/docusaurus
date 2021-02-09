@@ -127,11 +127,11 @@ declare module '@theme/hooks/useAnnouncementBar' {
 
 declare module '@theme/hooks/useHideableNavbar' {
   export type useHideableNavbarReturns = {
-    readonly navbarRef: (node: HTMLElement | null) => void;
-    readonly isNavbarVisible: boolean;
+    readonly navbarVisible: boolean;
+    readonly setNavbarVisible: (visible: boolean) => void;
   };
 
-  const useHideableNavbar: (hideOnScroll: boolean) => useHideableNavbarReturns;
+  const useHideableNavbar: () => useHideableNavbarReturns;
   export default useHideableNavbar;
 }
 
@@ -214,6 +214,8 @@ declare module '@theme/hooks/useUserPreferencesContext' {
     setTabGroupChoices: (groupId: string, newChoice: string) => void;
     isAnnouncementBarClosed: boolean;
     closeAnnouncementBar: () => void;
+    navbarVisible: boolean;
+    setNavbarVisible: (visible: boolean) => void;
   };
 
   export default function useUserPreferencesContext(): UserPreferencesContextProps;
