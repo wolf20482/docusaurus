@@ -74,6 +74,10 @@ const useHideableNavbar = (): useHideableNavbarReturns => {
       return;
     }
 
+    if (!location.hash) {
+      return;
+    }
+
     isFocusedAnchor.current = true;
   }, [location.hash]);
 

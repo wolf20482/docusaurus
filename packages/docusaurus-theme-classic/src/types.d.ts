@@ -314,6 +314,13 @@ declare module '@theme/NavbarItem/DefaultNavbarItem' {
   export default DefaultNavbarItem;
 }
 
+declare module '@theme/NavbarItem/SearchNavbarItem' {
+  export type Props = {readonly mobile?: boolean};
+
+  const SearchNavbarItem: (props: Props) => JSX.Element;
+  export default SearchNavbarItem;
+}
+
 declare module '@theme/NavbarItem/LocaleDropdownNavbarItem' {
   import type {Props as DefaultNavbarItemProps} from '@theme/NavbarItem/DefaultNavbarItem';
   import type {NavLinkProps} from '@theme/NavbarItem/DefaultNavbarItem';
@@ -368,13 +375,15 @@ declare module '@theme/NavbarItem' {
   import type {Props as DefaultNavbarItemProps} from '@theme/NavbarItem/DefaultNavbarItem';
   import type {Props as DocsVersionDropdownNavbarItemProps} from '@theme/NavbarItem/DocsVersionDropdownNavbarItem';
   import type {Props as DocsVersionNavbarItemProps} from '@theme/NavbarItem/DocsVersionNavbarItem';
+  import type {Props as SearchNavbarItemProps} from '@theme/NavbarItem/SearchNavbarItem';
 
   export type Props =
     | ({readonly type?: 'default' | undefined} & DefaultNavbarItemProps)
     | ({
         readonly type: 'docsVersionDropdown';
       } & DocsVersionDropdownNavbarItemProps)
-    | ({readonly type: 'docsVersion'} & DocsVersionNavbarItemProps);
+    | ({readonly type: 'docsVersion'} & DocsVersionNavbarItemProps)
+    | ({readonly type: 'search'} & SearchNavbarItemProps);
 
   const NavbarItem: (props: Props) => JSX.Element;
   export default NavbarItem;

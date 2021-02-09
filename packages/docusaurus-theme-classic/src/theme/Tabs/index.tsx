@@ -73,8 +73,8 @@ function Tabs(props: Props): JSX.Element {
             );
             window.scrollBy(0, -navbarHeight);
           }
-        }, 10);
-      }, 200);
+        }, 50);
+      }, 150);
     }
   };
 
