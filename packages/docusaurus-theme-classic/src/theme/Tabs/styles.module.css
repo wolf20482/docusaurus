@@ -9,3 +9,15 @@
   margin-top: 0 !important;
 }
 
+.tabItemActive {
+  animation: blink 0.6s ease 3;
+}
+
+@keyframes blink {
+  0% {
+    background-color: var(--ifm-hover-overlay);
+  }
+  100% {
+    background-color: rgba(0, 0, 0, 0);
+  }
+}

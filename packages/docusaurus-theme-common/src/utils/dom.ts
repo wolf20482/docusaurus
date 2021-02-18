@@ -8,6 +8,10 @@
 import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment';
 
 function getPropertyValue(name: string): string {
+  if (!ExecutionEnvironment.canUseDOM) {
+    return '';
+  }
+
   return window
     .getComputedStyle(document.documentElement)
     .getPropertyValue(name);
@@ -27,19 +31,4 @@ function isInViewport(element: HTMLElement) {
   return top >= 0 && right <= innerWidth && bottom <= innerHeight && left >= 0;
 }
 
-export const domUtils = new Proxy(
-  {getPropertyValue, convertRemToPx, isInViewport},
-  {
-    get: (obj: any, prop: any) => {
-      const origMethod = obj[prop];
-
-      return (...args: any) => {
-        if (!ExecutionEnvironment.canUseDOM) {
-          return undefined;
-        }
-
-        return origMethod.apply(obj, args);
-      };
-    },
-  },
-);
+export const domUtils = {getPropertyValue, convertRemToPx, isInViewport};

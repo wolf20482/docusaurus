@@ -9,6 +9,7 @@ import {useState, useEffect, useRef} from 'react';
 import {useLocation} from '@docusaurus/router';
 import {useThemeConfig, domUtils} from '@docusaurus/theme-common';
 import useScrollPosition from '@theme/hooks/useScrollPosition';
+import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment';
 import type {useHideableNavbarReturns} from '@theme/hooks/useHideableNavbar';
 
 const useHideableNavbar = (): useHideableNavbarReturns => {
@@ -17,9 +18,12 @@ const useHideableNavbar = (): useHideableNavbarReturns => {
   const isFocusedAnchor = useRef(false);
   const [navbarVisible, setNavbarVisible] = useState(hideOnScroll);
   const [lastScrollTop, setLastScrollTop] = useState(0);
-  const navbarHeight = domUtils.convertRemToPx(
-    domUtils.getPropertyValue('--ifm-navbar-height'),
-  );
+  const navbarHeight =
+    (ExecutionEnvironment.canUseDOM &&
+      domUtils.convertRemToPx(
+        domUtils.getPropertyValue('--ifm-navbar-height'),
+      )) ||
+    0;
 
   useScrollPosition(
     ({scrollY: scrollTop}) => {

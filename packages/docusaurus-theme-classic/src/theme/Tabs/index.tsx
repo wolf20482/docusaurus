@@ -7,7 +7,7 @@
 
 import React, {useState, cloneElement, Children, ReactElement} from 'react';
 import useUserPreferencesContext from '@theme/hooks/useUserPreferencesContext';
-import {useThemeConfig, domUtils} from '@docusaurus/theme-common';
+import {domUtils} from '@docusaurus/theme-common';
 import type {Props} from '@theme/Tabs';
 import type {Props as TabItemProps} from '@theme/TabItem';
 
@@ -22,12 +22,7 @@ const keys = {
 
 function Tabs(props: Props): JSX.Element {
   const {lazy, block, defaultValue, values, groupId, className} = props;
-  const {
-    tabGroupChoices,
-    setTabGroupChoices,
-    setNavbarVisible,
-  } = useUserPreferencesContext();
-  const {hideOnScroll} = useThemeConfig().navbar;
+  const {tabGroupChoices, setTabGroupChoices} = useUserPreferencesContext();
   const [selectedValue, setSelectedValue] = useState(defaultValue);
   const children = Children.toArray(props.children) as ReactElement<
     TabItemProps
@@ -61,19 +56,12 @@ function Tabs(props: Props): JSX.Element {
         }
 
         selectedTab.scrollIntoView({
-          block: 'start',
+          block: 'center',
+          behavior: 'smooth',
         });
 
-        setTimeout(() => {
-          if (hideOnScroll) {
-            setNavbarVisible(false);
-          } else {
-            const navbarHeight = domUtils.convertRemToPx(
-              domUtils.getPropertyValue('--ifm-navbar-height'),
-            );
-            window.scrollBy(0, -navbarHeight);
-          }
-        }, 50);
+        selectedTab.classList.add(styles.tabItemActive);
+        setTimeout(() => selectedTab.classList.add(styles.tabItemActive), 2000);
       }, 150);
     }
   };
