@@ -8,11 +8,16 @@
 /*
  * ADD YOUR SITE TO DOCUSAURUS SHOWCASE:
  *
- * Instructions
- * - add your site in the json array below, in alphabetical order of title
- * - add a local image preview (decent screenshot of your Docusaurus site)
+ * Requirements for adding your site to our showcase:
+ * - It is a real site with real content and customizations (different enough from init templates)
+ * - It has a stable domain name (a random Netlify/Vercel domain is not allowed)
+ * - The code is publicly available
  *
- * The image must be added to the Github repository, and use require("image")
+ * Instructions:
+ * - Add your site in the json array below, in alphabetical order of title
+ * - Add a local image preview (decent screenshot of your Docusaurus site)
+ *
+ * The image must be added to the GitHub repository, and use `require("image")`
  *
  * Example PR: https://github.com/facebook/docusaurus/pull/3976
  *
@@ -62,6 +67,15 @@ const users = [
     source: 'https://github.com/amphoradata/amphoradata.github.io',
     fbOpenSource: false,
     pinned: false,
+  },
+  {
+    title: 'Apache APISIX',
+    description: 'A Dynamic, Real-Time, High-Performance Cloud-Native API Gateway',
+    preview: require('./showcase/apache-apisix.png'),
+    website: 'https://apisix.apache.org/',
+    source: 'https://github.com/apache/apisix-website',
+    fbOpenSource: false,
+    pinned: true,
   },
   {
     title: 'Axioms',
@@ -137,6 +151,15 @@ const users = [
     pinned: false,
   },
   {
+    title: 'Console Table',
+    description: 'Printing Pretty Tables on your console.',
+    preview: require('./showcase/console-table.png'),
+    website: 'https://console-table.netlify.app/',
+    source: 'https://github.com/ayonious/console-table-docu',
+    fbOpenSource: false,
+    pinned: false,
+  },
+  {
     title: 'Datagit',
     description:
       'A persian tutorial website strive to make quality education for everyone.',
@@ -172,7 +195,7 @@ const users = [
     source: 'https://github.com/ataft/flexit-docs',
     fbOpenSource: false,
     pinned: false,
-  },  
+  },
   {
     title: 'Flux',
     description: 'Application architecture for building user interfaces',
@@ -238,11 +261,20 @@ const users = [
     pinned: true,
   },
   {
-    title: 'MBT Bundle',
-    description: 'An open source model-based testing tool',
-    preview: require('./showcase/mbt-bundle.png'),
-    website: 'https://mbtbundle.org',
-    source: 'https://github.com/tienvx/mbt-bundle',
+    title: 'SICOPE Model',
+    description: 'An open source model-based testing tool for web applications',
+    preview: require('./showcase/sicope-model.png'),
+    website: 'https://sicope-model.github.io/',
+    source: 'https://github.com/sicope-model/sicope-model',
+    fbOpenSource: false,
+    pinned: false,
+  },
+  {
+    title: 'MikroORM',
+    description: 'TypeScript ORM for Node.js based on Data Mapper, Unit of Work and Identity Map patterns.',
+    preview: require('./showcase/mikro-orm.png'),
+    website: 'https://mikro-orm.io',
+    source: 'https://github.com/mikro-orm/mikro-orm',
     fbOpenSource: false,
     pinned: false,
   },
@@ -456,6 +488,16 @@ const users = [
     preview: require('./showcase/wasp.png'),
     website: 'https://wasp-lang.dev/',
     source: 'https://github.com/wasp-lang/wasp',
+    fbOpenSource: false,
+    pinned: false,
+  },
+  {
+    title: 'WebdriverIO',
+    description:
+      'Next-gen browser and mobile automation test framework for Node.js',
+    preview: require('./showcase/webdriverio.png'),
+    website: 'https://webdriver.io/',
+    source: 'https://github.com/webdriverio/webdriverio',
     fbOpenSource: false,
     pinned: false,
   },

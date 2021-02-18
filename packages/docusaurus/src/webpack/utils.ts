@@ -23,10 +23,13 @@ import path from 'path';
 import crypto from 'crypto';
 import chalk from 'chalk';
 import {TransformOptions} from '@babel/core';
-import {ConfigureWebpackFn} from '@docusaurus/types';
+import {ConfigureWebpackFn, ConfigurePostCssFn} from '@docusaurus/types';
 import CssNanoPreset from '@docusaurus/cssnano-preset';
 import {version as cacheLoaderVersion} from 'cache-loader/package.json';
-import {BABEL_CONFIG_FILE_NAME, STATIC_ASSETS_DIR_NAME} from '../constants';
+import {
+  BABEL_CONFIG_FILE_NAME,
+  OUTPUT_STATIC_ASSETS_DIR_NAME,
+} from '../constants';
 
 // Utility method to get style loaders
 export function getStyleLoaders(
@@ -175,6 +178,37 @@ export function applyConfigureWebpack(
   return config;
 }
 
+export function applyConfigurePostCss(
+  configurePostCss: NonNullable<ConfigurePostCssFn>,
+  config: Configuration,
+): Configuration {
+  type LocalPostCSSLoader = Loader & {options: {postcssOptions: any}};
+
+  // TODO not ideal heuristic but good enough for our usecase?
+  function isPostCssLoader(loader: Loader): loader is LocalPostCSSLoader {
+    return !!(loader as any)?.options?.postcssOptions;
+  }
+
+  // Does not handle all edge cases, but good enough for now
+  function overridePostCssOptions(entry) {
+    if (isPostCssLoader(entry)) {
+      entry.options.postcssOptions = configurePostCss(
+        entry.options.postcssOptions,
+      );
+    } else if (Array.isArray(entry.oneOf)) {
+      entry.oneOf.forEach(overridePostCssOptions);
+    } else if (Array.isArray(entry.use)) {
+      entry.use
+        .filter((u) => typeof u === 'object')
+        .forEach(overridePostCssOptions);
+    }
+  }
+
+  config.module?.rules.forEach(overridePostCssOptions);
+
+  return config;
+}
+
 // See https://webpack.js.org/configuration/stats/#statswarningsfilter
 // @slorber: note sure why we have to re-implement this logic
 // just know that legacy had this only partially implemented, so completed it
@@ -244,7 +278,7 @@ export function getFileLoaderUtils(): Record<string, any> {
 
   // defines the path/pattern of the assets handled by webpack
   const fileLoaderFileName = (folder: AssetFolder) =>
-    `${STATIC_ASSETS_DIR_NAME}/${folder}/[name]-[hash].[ext]`;
+    `${OUTPUT_STATIC_ASSETS_DIR_NAME}/${folder}/[name]-[hash].[ext]`;
 
   const loaders = {
     file: (options: {folder: AssetFolder}) => {

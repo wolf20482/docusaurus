@@ -41,8 +41,33 @@ const isBootstrapPreset = process.env.DOCUSAURUS_PRESET === 'bootstrap';
 
 const isVersioningDisabled = !!process.env.DISABLE_VERSIONING;
 
+// Special deployment for staging locales until they get enough translations
+// https://app.netlify.com/sites/docusaurus-i18n-staging
+// https://docusaurus-i18n-staging.netlify.app/
+const isI18nStaging = process.env.I18N_STAGING === 'true';
+
+const LocaleConfigs = isI18nStaging
+  ? // Staging locales (https://docusaurus-i18n-staging.netlify.app/)
+    {
+      en: {
+        label: 'English',
+      },
+      'zh-CN': {
+        label: '简体中文',
+      },
+    }
+  : // Production locales
+    {
+      en: {
+        label: 'English',
+      },
+      fr: {
+        label: 'Français',
+      },
+    };
+
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
-module.exports = {
+(module.exports = {
   title: 'Docusaurus',
   tagline: 'Build optimized websites quickly, focus on your content',
   organizationName: 'facebook',
@@ -52,15 +77,8 @@ module.exports = {
   url: 'https://v2.docusaurus.io',
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'fr'],
-    localeConfigs: {
-      en: {
-        label: 'English',
-      },
-      fr: {
-        label: 'Français',
-      },
-    },
+    locales: Object.keys(LocaleConfigs),
+    localeConfigs: LocaleConfigs,
   },
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -210,13 +228,15 @@ module.exports = {
           // routeBasePath: '/',
           path: 'docs',
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: ({locale, versionDocsDirPath, docPath}) => {
+          editUrl: ({locale, docPath}) => {
             if (locale !== 'en') {
               return `https://crowdin.com/project/docusaurus-v2/${locale}`;
             }
-            return `https://github.com/facebook/docusaurus/edit/master/website/${versionDocsDirPath}/${docPath}`;
+            // We want users to submit doc updates to the upstream/next version!
+            // Otherwise we risk losing the update on the next release.
+            const nextVersionDocsDirPath = 'docs';
+            return `https://github.com/facebook/docusaurus/edit/master/website/${nextVersionDocsDirPath}/${docPath}`;
           },
-          editCurrentVersion: true,
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
           remarkPlugins: [
@@ -441,4 +461,4 @@ module.exports = {
       copyright: `Copyright © ${new Date().getFullYear()} Facebook, Inc. Built with Docusaurus.`,
     },
   },
-};
+});

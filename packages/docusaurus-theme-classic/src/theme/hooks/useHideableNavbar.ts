@@ -32,6 +32,7 @@ const useHideableNavbar = (): useHideableNavbarReturns => {
       }
 
       if (scrollTop < navbarHeight) {
+        setNavbarVisible(true);
         return;
       }
 
